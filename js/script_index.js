@@ -157,23 +157,57 @@ const renderizarDadosTabela = () => {
         bodyListarTabela.appendChild(p);
     }else {
 
+        const divRowCabecalho = criarElementosHtml('div');
+        const divColCabecalho = criarElementosHtml('div');
+        const img = criarElementosHtml('img');
+        const br = criarElementosHtml('br');
+        const h5Cabecalho = criarElementosHtml('h5');
         const table = criarElementosHtml('table');
         const thead = criarElementosHtml('thead');
         const tr = criarElementosHtml('tr');
-        const th = [
-            {tag: 'th', innerText: 'R$ DIÁRIAS'},
-            {tag: 'th', innerText: 'MOTORISTAS / CARREGAMENTOS'}
-        ];
+        const thDiaria = criarElementosHtml('th', 'R$ DIÁRIAS');
+        const thMotoristaCarregamentos = criarElementosHtml('th', 'MOTORISTA / CARREGAMENTOS');
+        const thPlaca = criarElementosHtml('th', 'PLACA');
+        const thAjudantes = criarElementosHtml('th', 'AJUDANTES');
+        const thCidades = criarElementosHtml('th', 'CIDADES ROTA');
+        const thAcoes = criarElementosHtml('th');
 
-        table.classList.add('table', 'table-bordered');
+        divRowCabecalho.classList.add('row');
+        divColCabecalho.classList.add('col-md-12', 'text-center');
+
+        img.src = "./img/logo_oficial_grupo_vicunha.png";
+        img.classList.add('img-fluid');
+        img.alt = "Logo Grupo Vicunha";
+        img.width = "200";
+        img.height = "200";
+
+        h5Cabecalho.classList.add('h5-cabecalho');
+        h5Cabecalho.innerHTML = `PLANILHA DE ROTA - ${validaCampoDataPlanilha()}`;
+        
+        table.classList.add('table', 'table-bordered', 'table-listar');
 
         tr.classList.add('text-center');
 
-        for(let index = 0; index < th.length; index++) {
-            tr.appendChild(criarElementosHtml);
-        }
+        thDiaria.classList.add('thDiaria');
+        thMotoristaCarregamentos.classList.add('thMotoristaCarregamentos');
+        thPlaca.classList.add('thPlaca');
+        thAjudantes.classList.add('thAjudantes');
+        thCidades.classList.add('thCidades');
+        thAcoes.classList.add('thAcoes');
 
-        
+        divColCabecalho.appendChild(img);
+        divColCabecalho.appendChild(br);
+        divColCabecalho.appendChild(h5Cabecalho);
+        divRowCabecalho.appendChild(divColCabecalho);
+        bodyListarTabela.appendChild(divRowCabecalho);
+
+        tr.appendChild(thDiaria);
+        tr.appendChild(thMotoristaCarregamentos);
+        tr.appendChild(thPlaca);
+        tr.appendChild(thAjudantes);
+        tr.appendChild(thCidades);
+        tr.appendChild(thAcoes);
+
         thead.appendChild(tr);
         table.appendChild(thead);
 
@@ -194,6 +228,23 @@ const gerarArrayDadosSelect = (dadosSelect) => {
     }
 
     return listaDados;
+};
+
+//Funções para validas campos data relatorio e nome funcionario
+const validaCampoDataPlanilha = () => {
+    const data = document.getElementById('input-data-planilha').value;
+
+    if(data === '') {
+        const dataHora = new Date().toLocaleString("pt-br", {
+            timeZone: "America/Fortaleza"
+        });
+
+        return dataHora.slice(0, 10);
+
+    }else {
+        return data.match(/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}/)[0].split('-').reverse().join('/');
+
+    }
 };
 
 //Funções para formatar campo peso e valor 

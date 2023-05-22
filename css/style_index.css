@@ -19,3 +19,31 @@ main {
 label {
     font-weight: 600;
 }
+
+.table-listar, tr, th {
+    font-size: 14px;
+}
+
+.thDiaria {
+    width: 12%;
+}
+
+.thMotoristaCarregamentos {
+    width: 25%;
+}
+
+.thPlaca {
+    width: 12%;
+}
+
+.thAjudantes {
+    width: 20%;
+}
+
+.thCidades {
+    width: 29%;
+}
+
+.thAcoes {
+    width: 2%;
+}
