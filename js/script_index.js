@@ -1,3 +1,5 @@
+const bodyListarTabela = document.getElementById('body-listar-tabela');
+
 //Funções para ler arquivo json e buscar dados dos funcionarios e placas
 const getFuncionariosLista = async () => {
     const funcionariosJson = await fetch("./dados/funcionarios.json");
@@ -95,13 +97,103 @@ const renderizarElementosOptionsForm = async () => {
 
 //Funções de crud para os dados da tabela
 const adicionarDados = () => {
-    const formData = new FormData(document.getElementById('form-dados-corpo-planilha'));
+    const placa  = document.getElementById('select-placa-veiculo');
+    const motorista = document.getElementById('select-motorista');
+    const ajudantes = gerarArrayDadosSelect(document.getElementById('select-ajudantes'));
+    const diaria = document.getElementById('input-diaria');
+    const peso = document.getElementById('input-peso');
+    const carregamentos = document.getElementById('input-carregamentos');
+    const cidades = gerarArrayDadosSelect(document.getElementById('select-cidades'));
 
-    const placa = formData.get("select-placa-veiculo");
-    const motorista = formData.get("select-motorista");
-    const ajudantes = formData.get("select-ajudantes");
+    const dadosPlanilha = {
+        id: "",
+        placa: placa.value,
+        motorista: motorista.value,
+        ajudantes: ajudantes,
+        diaria: diaria.value,
+        peso: peso.value,
+        carregamentos: carregamentos.value,
+        cidades: cidades
+    }; 
 
-    console.log(ajudantes)
+    const dadosPlanilhaLocalStorage = JSON.parse(localStorage.getItem('dadosPlanilha')) ?? [];
+    
+    dadosPlanilhaLocalStorage.push(dadosPlanilha);
+    localStorage.setItem('dadosPlanilha', JSON.stringify(dadosPlanilhaLocalStorage));
+    
+    placa.options.length = 0;
+    motorista.options.length = 0;
+    document.getElementById('select-ajudantes').options.length = 0;
+    diaria.value = "";
+    peso.value = "";
+    carregamentos.value = "";
+    document.getElementById('select-cidades').options.length = 0;
+
+    placa.appendChild(criarElementosHtml('option'));
+    motorista.appendChild(criarElementosHtml('option'));
+
+    renderizarElementosOptionsForm();
+};
+
+const deletarDados = (id) => {
+    const dadosPlanilhaLocalStorage = JSON.parse(localStorage.getItem('dadosPlanilha')) ?? [];
+
+    dadosPlanilhaLocalStorage = dadosPlanilhaLocalStorage.filter((value) => {
+        return value.id != id;
+    });
+
+    localStorage.setItem('dadosPlanilha', JSON.stringify(dadosPlanilhaLocalStorage));
+};
+
+const renderizarDadosTabela = () => {
+    const dadosPlanilhaLocalStorage = JSON.parse(localStorage.getItem('dadosPlanilha')) ?? [];
+
+    bodyListarTabela.innerHTML = '';
+
+    if(dadosPlanilhaLocalStorage.length === 0) {
+        const p = criarElementosHtml('p', 'TABELA VAZIA!!!');
+
+        p.classList.add('text-center');
+        bodyListarTabela.appendChild(p);
+    }else {
+
+        const table = criarElementosHtml('table');
+        const thead = criarElementosHtml('thead');
+        const tr = criarElementosHtml('tr');
+        const th = [
+            {tag: 'th', innerText: 'R$ DIÁRIAS'},
+            {tag: 'th', innerText: 'MOTORISTAS / CARREGAMENTOS'}
+        ];
+
+        table.classList.add('table', 'table-bordered');
+
+        tr.classList.add('text-center');
+
+        for(let index = 0; index < th.length; index++) {
+            tr.appendChild(criarElementosHtml);
+        }
+
+        
+        thead.appendChild(tr);
+        table.appendChild(thead);
+
+        bodyListarTabela.appendChild(table);
+
+        console.log(bodyListarTabela);
+    }
+};
+
+//Função para gerar os arrays de dados de ajudantes e cidades
+const gerarArrayDadosSelect = (dadosSelect) => {
+    const listaDados = [];
+
+    for(let index = 0; index < dadosSelect.length; index++) {
+        if(dadosSelect.options[index].selected) {
+            listaDados.push(dadosSelect.options[index].value);
+        }
+    }
+
+    return listaDados;
 };
 
 //Funções para formatar campo peso e valor 
