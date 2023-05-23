@@ -162,6 +162,8 @@ const renderizarDadosTabela = () => {
         const img = criarElementosHtml('img');
         const br = criarElementosHtml('br');
         const h5Cabecalho = criarElementosHtml('h5');
+        const divRowConteudo = criarElementosHtml('div');
+        const divColConteudo = criarElementosHtml('div');
         const table = criarElementosHtml('table');
         const thead = criarElementosHtml('thead');
         const tr = criarElementosHtml('tr');
@@ -171,7 +173,8 @@ const renderizarDadosTabela = () => {
         const thAjudantes = criarElementosHtml('th', 'AJUDANTES');
         const thCidades = criarElementosHtml('th', 'CIDADES ROTA');
         const thAcoes = criarElementosHtml('th');
-
+        const tbody = criarElementosHtml('tbody');
+        
         divRowCabecalho.classList.add('row');
         divColCabecalho.classList.add('col-md-12', 'text-center');
 
@@ -183,6 +186,9 @@ const renderizarDadosTabela = () => {
 
         h5Cabecalho.classList.add('h5-cabecalho');
         h5Cabecalho.innerHTML = `PLANILHA DE ROTA - ${validaCampoDataPlanilha()}`;
+
+        divRowConteudo.classList.add('row');
+        divColConteudo.classList.add('col-md-12', 'table-responsive');
         
         table.classList.add('table', 'table-bordered', 'table-listar');
 
@@ -211,13 +217,20 @@ const renderizarDadosTabela = () => {
         thead.appendChild(tr);
         table.appendChild(thead);
 
-        bodyListarTabela.appendChild(table);
+        dadosPlanilhaLocalStorage.forEach((dados) => {
+            tbody.appendChild(criarRowsTabela(dados));
+        });
+
+        table.appendChild(tbody);    
+        divColConteudo.appendChild(table);
+        divRowConteudo.appendChild(divColConteudo);
+        bodyListarTabela.appendChild(divRowConteudo);
 
         console.log(bodyListarTabela);
     }
 };
 
-//Função para gerar os arrays de dados de ajudantes e cidades
+//Função para gerar os arrays de dados de ajudantes e cidades criar row tabela
 const gerarArrayDadosSelect = (dadosSelect) => {
     const listaDados = [];
 
@@ -228,6 +241,30 @@ const gerarArrayDadosSelect = (dadosSelect) => {
     }
 
     return listaDados;
+};
+
+const criarRowsTabela = (dados) => {
+    const tr = criarElementosHtml('tr');
+    const tdDiaria = criarElementosHtml('td');
+    const tdMotoristaCarregamentos = criarElementosHtml('td');
+    const tdPlaca = criarElementosHtml('td');
+    const tdAjudantes = criarElementosHtml('td');
+    const tdCidades = criarElementosHtml('td');
+    const tdAcoes = criarElementosHtml('td');
+
+    tdDiaria.classList.add('text-center');
+    tdMotoristaCarregamentos.classList.add('text-justify');
+    tdPlaca.classList.add('text-center');
+    tdAcoes.classList.add('text-center');
+
+    tr.appendChild(tdDiaria);
+    tr.appendChild(tdMotoristaCarregamentos);
+    tr.appendChild(tdPlaca);
+    tr.appendChild(tdAjudantes);
+    tr.appendChild(tdCidades);
+    tr.appendChild(tdAcoes);
+
+    return tr;
 };
 
 //Funções para validas campos data relatorio e nome funcionario
