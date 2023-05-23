@@ -107,10 +107,10 @@ const adicionarDados = () => {
 
     const dadosPlanilha = {
         id: "",
-        placa: placa.value,
-        motorista: motorista.value,
+        placa: validarCampos('placa', placa.value),
+        motorista: validarCampos('motorista', motorista.value),
         ajudantes: ajudantes,
-        diaria: diaria.value,
+        diaria: validarCampos('diaria', diaria.value),
         peso: peso.value,
         carregamentos: carregamentos.value,
         cidades: cidades
@@ -133,6 +133,7 @@ const adicionarDados = () => {
     motorista.appendChild(criarElementosHtml('option'));
 
     renderizarElementosOptionsForm();
+    renderizarDadosTabela();
 };
 
 const deletarDados = (id) => {
@@ -156,7 +157,6 @@ const renderizarDadosTabela = () => {
         p.classList.add('text-center');
         bodyListarTabela.appendChild(p);
     }else {
-
         const divRowCabecalho = criarElementosHtml('div');
         const divColCabecalho = criarElementosHtml('div');
         const img = criarElementosHtml('img');
@@ -166,13 +166,6 @@ const renderizarDadosTabela = () => {
         const divColConteudo = criarElementosHtml('div');
         const table = criarElementosHtml('table');
         const thead = criarElementosHtml('thead');
-        const tr = criarElementosHtml('tr');
-        const thDiaria = criarElementosHtml('th', 'R$ DIÁRIAS');
-        const thMotoristaCarregamentos = criarElementosHtml('th', 'MOTORISTA / CARREGAMENTOS');
-        const thPlaca = criarElementosHtml('th', 'PLACA');
-        const thAjudantes = criarElementosHtml('th', 'AJUDANTES');
-        const thCidades = criarElementosHtml('th', 'CIDADES ROTA');
-        const thAcoes = criarElementosHtml('th');
         const tbody = criarElementosHtml('tbody');
         
         divRowCabecalho.classList.add('row');
@@ -192,33 +185,17 @@ const renderizarDadosTabela = () => {
         
         table.classList.add('table', 'table-bordered', 'table-listar');
 
-        tr.classList.add('text-center');
-
-        thDiaria.classList.add('thDiaria');
-        thMotoristaCarregamentos.classList.add('thMotoristaCarregamentos');
-        thPlaca.classList.add('thPlaca');
-        thAjudantes.classList.add('thAjudantes');
-        thCidades.classList.add('thCidades');
-        thAcoes.classList.add('thAcoes');
-
         divColCabecalho.appendChild(img);
         divColCabecalho.appendChild(br);
         divColCabecalho.appendChild(h5Cabecalho);
         divRowCabecalho.appendChild(divColCabecalho);
         bodyListarTabela.appendChild(divRowCabecalho);
 
-        tr.appendChild(thDiaria);
-        tr.appendChild(thMotoristaCarregamentos);
-        tr.appendChild(thPlaca);
-        tr.appendChild(thAjudantes);
-        tr.appendChild(thCidades);
-        tr.appendChild(thAcoes);
-
-        thead.appendChild(tr);
+        thead.appendChild(criarRowsThead(true));
         table.appendChild(thead);
 
         dadosPlanilhaLocalStorage.forEach((dados) => {
-            tbody.appendChild(criarRowsTabela(dados));
+            tbody.appendChild(criarRowsTbody(dados, true));
         });
 
         table.appendChild(tbody);    
@@ -226,7 +203,6 @@ const renderizarDadosTabela = () => {
         divRowConteudo.appendChild(divColConteudo);
         bodyListarTabela.appendChild(divRowConteudo);
 
-        console.log(bodyListarTabela);
     }
 };
 
@@ -243,7 +219,48 @@ const gerarArrayDadosSelect = (dadosSelect) => {
     return listaDados;
 };
 
-const criarRowsTabela = (dados) => {
+const criarRowsThead = (estadoHead) => {
+    const tr = criarElementosHtml('tr');
+    const thDiaria = criarElementosHtml('th', 'R$ DIÁRIAS');
+    const thMotoristaCarregamentos = criarElementosHtml('th', 'MOTORISTA / CARREGAMENTOS');
+    const thPlaca = criarElementosHtml('th', 'PLACA');
+    const thAjudantes = criarElementosHtml('th', 'AJUDANTES');
+    const thCidades = criarElementosHtml('th', 'CIDADES ROTA');
+    const thAcoes = criarElementosHtml('th');
+
+    tr.classList.add('text-center');
+
+    thDiaria.classList.add('thDiaria');
+    thMotoristaCarregamentos.classList.add('thMotoristaCarregamentos');
+    thPlaca.classList.add('thPlaca');
+    thAjudantes.classList.add('thAjudantes');
+    thCidades.classList.add('thCidades');
+    thAcoes.classList.add('thAcoes');
+
+    if(estadoHead) {
+
+        tr.appendChild(thDiaria);
+        tr.appendChild(thMotoristaCarregamentos);
+        tr.appendChild(thPlaca);
+        tr.appendChild(thAjudantes);
+        tr.appendChild(thCidades);
+        tr.appendChild(thAcoes);
+
+        return tr;
+
+    }else {
+
+        tr.appendChild(thDiaria);
+        tr.appendChild(thMotoristaCarregamentos);
+        tr.appendChild(thPlaca);
+        tr.appendChild(thAjudantes);
+        tr.appendChild(thCidades);
+
+        return tr;
+    }
+};
+
+const criarRowsTbody = (dados, estadoBody) => {
     const tr = criarElementosHtml('tr');
     const tdDiaria = criarElementosHtml('td');
     const tdMotoristaCarregamentos = criarElementosHtml('td');
@@ -257,17 +274,31 @@ const criarRowsTabela = (dados) => {
     tdPlaca.classList.add('text-center');
     tdAcoes.classList.add('text-center');
 
-    tr.appendChild(tdDiaria);
-    tr.appendChild(tdMotoristaCarregamentos);
-    tr.appendChild(tdPlaca);
-    tr.appendChild(tdAjudantes);
-    tr.appendChild(tdCidades);
-    tr.appendChild(tdAcoes);
+    tdDiaria.innerHTML = `R$ ${dados['diaria']}`;
 
-    return tr;
+    if(estadoBody) {
+        tr.appendChild(tdDiaria);
+        tr.appendChild(tdMotoristaCarregamentos);
+        tr.appendChild(tdPlaca);
+        tr.appendChild(tdAjudantes);
+        tr.appendChild(tdCidades);
+        tr.appendChild(tdAcoes);
+
+        return tr;
+
+    }else {
+        tr.appendChild(tdDiaria);
+        tr.appendChild(tdMotoristaCarregamentos);
+        tr.appendChild(tdPlaca);
+        tr.appendChild(tdAjudantes);
+        tr.appendChild(tdCidades);
+
+        return tr;
+    }
+    
 };
 
-//Funções para validas campos data relatorio e nome funcionario
+//Funções para validar campos data relatorio, nome funcionario e demais campos
 const validaCampoDataPlanilha = () => {
     const data = document.getElementById('input-data-planilha').value;
 
@@ -282,6 +313,42 @@ const validaCampoDataPlanilha = () => {
         return data.match(/^[0-9]{4}\-[0-9]{2}\-[0-9]{2}/)[0].split('-').reverse().join('/');
 
     }
+};
+
+const validarCampos = (campo, valor) => {
+    let placa = '(vazio)';
+    let motorista = '(vazio)';
+    let diaria = '0,00';
+    let peso = '0.000';
+
+    switch (campo) {
+        case 'placa':
+            if(valor != '') {
+                placa = valor;
+            }
+
+            return placa;
+
+            break;
+
+        case 'diaria':
+            if(valor != '') {
+                diaria = valor;
+            }
+
+            return diaria;
+
+            break;
+
+        case 'motorista':
+            if(valor != '') {
+                motorista = valor;
+            }
+
+            return motorista;
+            break;
+
+    };
 };
 
 //Funções para formatar campo peso e valor 
@@ -323,6 +390,7 @@ document.getElementById('input-peso').addEventListener('keyup', formatarCampoPes
 document.getElementById('btn-adicionar').addEventListener('click', adicionarDados);
 
 renderizarElementosOptionsForm();
+renderizarDadosTabela();
 
 
 
