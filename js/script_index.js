@@ -106,13 +106,13 @@ const adicionarDados = () => {
     const cidades = gerarArrayDadosSelect(document.getElementById('select-cidades'));
 
     const dadosPlanilha = {
-        id: "",
+        id: gerarIdAleatorio(1000, 9999),
         placa: validarCampos('placa', placa.value),
         motorista: validarCampos('motorista', motorista.value),
         ajudantes: ajudantes,
         diaria: validarCampos('diaria', diaria.value),
-        peso: peso.value,
-        carregamentos: carregamentos.value,
+        peso: validarCampos('peso', peso.value),
+        carregamentos: validarCampos('carregamentos', carregamentos.value),
         cidades: cidades
     }; 
 
@@ -206,7 +206,7 @@ const renderizarDadosTabela = () => {
     }
 };
 
-//Função para gerar os arrays de dados de ajudantes e cidades criar row tabela
+//Função para gerar os arrays de dados de ajudantes e cidades / gerar id
 const gerarArrayDadosSelect = (dadosSelect) => {
     const listaDados = [];
 
@@ -219,6 +219,13 @@ const gerarArrayDadosSelect = (dadosSelect) => {
     return listaDados;
 };
 
+const gerarIdAleatorio = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min+'0'+Math.floor(Math.random() * (max - min + 1)) + (max);
+};
+
+//Funções para gerar rows tabela 
 const criarRowsThead = (estadoHead) => {
     const tr = criarElementosHtml('tr');
     const thDiaria = criarElementosHtml('th', 'R$ DIÁRIAS');
@@ -268,13 +275,28 @@ const criarRowsTbody = (dados, estadoBody) => {
     const tdAjudantes = criarElementosHtml('td');
     const tdCidades = criarElementosHtml('td');
     const tdAcoes = criarElementosHtml('td');
+    const pMotorista = criarElementosHtml('p');
+    const pCarregamentos = criarElementosHtml('p');
+    const pPeso = criarElementosHtml('p');
 
     tdDiaria.classList.add('text-center');
     tdMotoristaCarregamentos.classList.add('text-justify');
     tdPlaca.classList.add('text-center');
     tdAcoes.classList.add('text-center');
 
-    tdDiaria.innerHTML = `R$ ${dados['diaria']}`;
+    pCarregamentos.classList.add('pRowsMotoristaCarregamentos');
+    pPeso.classList.add('pRowsMotoristaCarregamentos');
+
+    pMotorista.innerText = dados['motorista'];
+    pCarregamentos.innerText = dados['carregamentos'];
+    pPeso.innerText = dados['peso'];
+    
+    tdDiaria.innerText = `R$ ${dados['diaria']}`;
+    tdPlaca.innerText = dados['placa'];
+
+    tdMotoristaCarregamentos.appendChild(pMotorista);
+    tdMotoristaCarregamentos.appendChild(pCarregamentos);
+    tdMotoristaCarregamentos.appendChild(pPeso);
 
     if(estadoBody) {
         tr.appendChild(tdDiaria);
@@ -320,6 +342,7 @@ const validarCampos = (campo, valor) => {
     let motorista = '(vazio)';
     let diaria = '0,00';
     let peso = '0.000';
+    let carregamentos = '(vazio)';
 
     switch (campo) {
         case 'placa':
@@ -348,6 +371,21 @@ const validarCampos = (campo, valor) => {
             return motorista;
             break;
 
+        case 'peso':
+            if(valor != '') {
+                peso = valor;
+            }
+
+            return peso;
+            break;
+        
+        case 'carregamentos':
+            if(valor != '') {
+                carregamentos = valor;
+            }
+
+            return carregamentos;
+            break;
     };
 };
 

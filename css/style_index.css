@@ -20,30 +20,36 @@ label {
     font-weight: 600;
 }
 
-.table-listar, tr, th {
-    font-size: 14px;
-}
-
 .thDiaria {
     width: 12%;
+    font-size: 14px;
 }
 
 .thMotoristaCarregamentos {
     width: 25%;
+    font-size: 14px;
 }
 
 .thPlaca {
     width: 12%;
+    font-size: 14px;
 }
 
 .thAjudantes {
     width: 20%;
+    font-size: 14px;
 }
 
 .thCidades {
     width: 29%;
+    font-size: 14px;
 }
 
 .thAcoes {
     width: 2%;
+    font-size: 14px;
+}
+
+.pRowsMotoristaCarregamentos {
+    margin-top: -15px
 }
