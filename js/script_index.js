@@ -1,4 +1,5 @@
 const bodyListarTabela = document.getElementById('body-listar-tabela');
+const footerImprimir = document.getElementById('footer-imprimir');
 
 //Funções para ler arquivo json e buscar dados dos funcionarios e placas
 const getFuncionariosLista = async () => {
@@ -53,13 +54,6 @@ const renderizarElementosOptionsForm = async () => {
     funcionariosLista.forEach(element => {
         const option = criarElementosHtml('option');
         
-        if(element['funcao'] == 'adm') {
-            option.value = element['nome'].toUpperCase();
-            option.innerText = element['nome'].toUpperCase();
-
-            selectFuncionarios.appendChild(option);
-        }
-
         if(element['funcao'] == 'motorista') {
             option.value = element['nome'].toUpperCase();
             option.innerText = element['nome'].toUpperCase();
@@ -93,6 +87,22 @@ const renderizarElementosOptionsForm = async () => {
         selectCidades.appendChild(option);
     });
 
+};
+
+const renderizarSelectFuncionarios = async () => {
+    const selectFuncionarios = document.getElementById('select-funcionario');
+    const funcionariosLista = await getFuncionariosLista();
+
+    funcionariosLista.forEach(element => {
+        const option = criarElementosHtml('option');
+
+        if(element['funcao'] == 'adm') {
+            option.value = element['nome'].toUpperCase();
+            option.innerText = element['nome'].toUpperCase();
+
+            selectFuncionarios.appendChild(option);
+        }
+    });
 };
 
 //Funções de crud para os dados da tabela
@@ -152,6 +162,7 @@ const renderizarDadosTabela = () => {
     const dadosPlanilhaLocalStorage = JSON.parse(localStorage.getItem('dadosPlanilha')) ?? [];
 
     bodyListarTabela.innerHTML = '';
+    footerImprimir.innerHTML = '';
 
     if(dadosPlanilhaLocalStorage.length === 0) {
         const p = criarElementosHtml('p', 'TABELA VAZIA!!!');
@@ -174,6 +185,7 @@ const renderizarDadosTabela = () => {
         const divColAssinaturaFuncionario = criarElementosHtml('div');
         const pLinha = criarElementosHtml('p');
         const pNomeFuncionario = criarElementosHtml('p');
+        const btnImprimir = criarElementosHtml('button', '', '<i class="fa fa-print" aria-hidden="true"></i> <b>IMPRIMIR</b>');
 
         divRowCabecalho.classList.add('row');
         divColCabecalho.classList.add('col-md-12', 'text-center');
@@ -194,6 +206,12 @@ const renderizarDadosTabela = () => {
 
         divRowAssinaturaFuncionario.classList.add('row', 'row-assinatura');
         divColAssinaturaFuncionario.classList.add('col-md-12', 'text-center');
+
+        pNomeFuncionario.classList.add('pNomeFuncionario');
+
+        btnImprimir.type = "button";
+        btnImprimir.classList.add('btn', 'btn-link', 'btn-sm', 'btn-imprimir');
+        btnImprimir.addEventListener('click', imprimirDadosPlanilha);
 
         pLinha.innerText = '__________________________________________________________';
         pNomeFuncionario.innerText = validaCampoNomeFuncionario();
@@ -222,6 +240,8 @@ const renderizarDadosTabela = () => {
         bodyListarTabela.appendChild(divRowConteudo);
         bodyListarTabela.appendChild(divRowAssinaturaFuncionario);
 
+        footerImprimir.appendChild(btnImprimir);
+
     }
 };
 
@@ -242,6 +262,19 @@ const gerarIdAleatorio = (min, max) => {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min+'0'+Math.floor(Math.random() * (max - min + 1)) + (max);
+};
+
+//Função para aplicar dados data e funcionario na tabela
+const aplicarDados = () => {
+    const dadosPlanilhaLocalStorage = JSON.parse(localStorage.getItem('dadosPlanilha')) ?? [];
+
+    if(dadosPlanilhaLocalStorage.length !== 0) {
+        const cabecalhoData = document.getElementsByClassName('h5-cabecalho');
+        const assinaturaFuncionario = document.getElementsByClassName('pNomeFuncionario');
+
+        cabecalhoData[0].innerText = `PLANILHA DE ROTA - ${validaCampoDataPlanilha()}`;
+        assinaturaFuncionario[0].innerText = validaCampoNomeFuncionario();
+    }
 };
 
 //Funções para gerar rows tabela 
@@ -309,8 +342,8 @@ const criarRowsTbody = (dados, estadoBody) => {
     btnDeletar.type = "button";
     btnVizualizar.type = "button";
 
-    btnDeletar.classList.add('btn', 'btn-link', 'btn-lg', 'btnsAcoes');
-    btnVizualizar.classList.add('btn', 'btn-link', 'btn-lg', 'btnsAcoes');
+    btnDeletar.classList.add('btn', 'btn-link', 'btn-sm', 'btnsAcoes');
+    btnVizualizar.classList.add('btn', 'btn-link', 'btn-sm', 'btnsAcoes');
 
     btnDeletar.addEventListener('click', () => {
         deletarDados(dados['id']);
@@ -532,15 +565,46 @@ const somarValorTotalDiarias = () => {
     return valorTotal;
 };
 
+//Funçoes para imprimir planilha e renderizar os dados a serem impressos
+const imprimirDadosPlanilha = () => {
+    const head = document.querySelectorAll('head')[0];
+    //const body = criarElementosHtml('body');
+    //const div = criarElementosHtml('div');
+
+    //html.lang = "pt-br";
+
+    //div.classList.add('container-fluid');
+    //body.appendChild(div);
+    //console.log(head)
+    //html.innerHTML = head;
+    //html.appendChild(body);
+
+    
+
+    //pagina += html.innerHTML;
+
+    const win = window.open('', '', 'height=800, width=1200');
+
+    win.document.write('<!DOCTYPE html><html lang="pt-br">');
+    //win.document.head = head;
+    win.document.write('</html>');
+
+    console.log(win);
+
+};
+
+const renderizarDadosConteudo = () => {
+    
+};
+
 document.getElementById('input-diaria').addEventListener('keyup', formatarCampoValor);
 document.getElementById('input-peso').addEventListener('keyup', formatarCampoPeso);
 
+document.getElementById('btn-aplicar').addEventListener('click', aplicarDados);
 document.getElementById('btn-adicionar').addEventListener('click', adicionarDados);
 
+renderizarSelectFuncionarios();
 renderizarElementosOptionsForm();
 renderizarDadosTabela();
-
-
-
 
 

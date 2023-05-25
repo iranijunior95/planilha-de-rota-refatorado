@@ -20,6 +20,10 @@ label {
     font-weight: 600;
 }
 
+#card-listar-tabela {
+    margin-top: 15px;
+}
+
 .thDiaria {
     width: 12%;
     font-size: 14px;
@@ -59,7 +63,7 @@ label {
 }
 
 .btnsAcoes {
-    margin-bottom: -15px;
+    margin-bottom: -5px;
 }
 
 .row-assinatura {
