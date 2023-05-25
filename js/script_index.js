@@ -567,34 +567,120 @@ const somarValorTotalDiarias = () => {
 
 //Funçoes para imprimir planilha e renderizar os dados a serem impressos
 const imprimirDadosPlanilha = () => {
-    const head = document.querySelectorAll('head')[0];
-    //const body = criarElementosHtml('body');
-    //const div = criarElementosHtml('div');
+    const head = document.querySelector('head');
+    const conteudoHtml = `<!DOCTYPE html>
+                          <html lang="pt-br">
+                            ${head.innerHTML}
+                            <body>
+                                <div class="container-fluid">
+                                    <div class="card">
+                                        
+                                        <div class="card-body" id="body-listar-tabela-imprimir">
 
-    //html.lang = "pt-br";
 
-    //div.classList.add('container-fluid');
-    //body.appendChild(div);
-    //console.log(head)
-    //html.innerHTML = head;
-    //html.appendChild(body);
+                    
+                                        </div>
+                    
+                                    </div>
+                                </div>
 
+                                <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+                                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+                                <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js" integrity="sha256-AFAYEOkzB6iIKnTYZOdUf9FFje6lOTYdwRJKwTN5mks=" crossorigin="anonymous"></script>
+                            </body>
+                          </html>`;
+                          
     
-
-    //pagina += html.innerHTML;
-
+    
     const win = window.open('', '', 'height=800, width=1200');
 
-    win.document.write('<!DOCTYPE html><html lang="pt-br">');
-    //win.document.head = head;
-    win.document.write('</html>');
+    win.document.write(conteudoHtml);
 
-    console.log(win);
-
+    renderizarDadosConteudo();
+    
+    //console.log(conteudoHtml);
+    
 };
 
 const renderizarDadosConteudo = () => {
+    const dadosPlanilhaLocalStorage = JSON.parse(localStorage.getItem('dadosPlanilha')) ?? [];
+    const bodyListarTabelaImprimir = document.getElementById('body-listar-tabela-imprimir');
     
+    bodyListarTabelaImprimir.innerHTML = '';
+
+    if(dadosPlanilhaLocalStorage.length === 0) {
+        const p = criarElementosHtml('p', 'TABELA VAZIA!!!');
+
+        p.classList.add('text-center');
+        bodyListarTabelaImprimir.appendChild(p);
+    }else {
+        const divRowCabecalho = criarElementosHtml('div');
+        const divColCabecalho = criarElementosHtml('div');
+        const img = criarElementosHtml('img');
+        const br = criarElementosHtml('br');
+        const h5Cabecalho = criarElementosHtml('h5');
+        const divRowConteudo = criarElementosHtml('div');
+        const divColConteudo = criarElementosHtml('div');
+        const table = criarElementosHtml('table');
+        const thead = criarElementosHtml('thead');
+        const tbody = criarElementosHtml('tbody');
+        const trValorTotal = criarElementosHtml('tr', '', `<td colspan="6"><b>VALOR TOTAL:</b> R$ ${somarValorTotalDiarias()}</td>`);
+        const divRowAssinaturaFuncionario = criarElementosHtml('div');
+        const divColAssinaturaFuncionario = criarElementosHtml('div');
+        const pLinha = criarElementosHtml('p');
+        const pNomeFuncionario = criarElementosHtml('p');
+
+        divRowCabecalho.classList.add('row');
+        divColCabecalho.classList.add('col-md-12', 'text-center');
+
+        img.src = "./img/logo_oficial_grupo_vicunha.png";
+        img.classList.add('img-fluid');
+        img.alt = "Logo Grupo Vicunha";
+        img.width = "200";
+        img.height = "200";
+
+        h5Cabecalho.classList.add('h5-cabecalho');
+        h5Cabecalho.innerHTML = `PLANILHA DE ROTA - ${validaCampoDataPlanilha()}`;
+
+        divRowConteudo.classList.add('row');
+        divColConteudo.classList.add('col-md-12', 'table-responsive');
+        
+        table.classList.add('table', 'table-bordered', 'table-listar');
+
+        divRowAssinaturaFuncionario.classList.add('row', 'row-assinatura');
+        divColAssinaturaFuncionario.classList.add('col-md-12', 'text-center');
+
+        pNomeFuncionario.classList.add('pNomeFuncionario');
+
+        pLinha.innerText = '__________________________________________________________';
+        pNomeFuncionario.innerText = validaCampoNomeFuncionario();
+
+        divColAssinaturaFuncionario.appendChild(pLinha);
+        divColAssinaturaFuncionario.appendChild(pNomeFuncionario);
+        divRowAssinaturaFuncionario.appendChild(divColAssinaturaFuncionario);
+
+        divColCabecalho.appendChild(img);
+        divColCabecalho.appendChild(br);
+        divColCabecalho.appendChild(h5Cabecalho);
+        divRowCabecalho.appendChild(divColCabecalho);
+        bodyListarTabela.appendChild(divRowCabecalho);
+
+        thead.appendChild(criarRowsThead(false));
+        table.appendChild(thead);
+
+        dadosPlanilhaLocalStorage.forEach((dados) => {
+            tbody.appendChild(criarRowsTbody(dados, false));
+        });
+
+        table.appendChild(tbody);  
+        table.appendChild(trValorTotal);  
+        divColConteudo.appendChild(table);
+        divRowConteudo.appendChild(divColConteudo);
+        bodyListarTabelaImprimir.appendChild(divRowConteudo);
+        bodyListarTabelaImprimir.appendChild(divRowAssinaturaFuncionario);
+
+    }
 };
 
 document.getElementById('input-diaria').addEventListener('keyup', formatarCampoValor);
