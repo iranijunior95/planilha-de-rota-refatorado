@@ -642,7 +642,39 @@ const imprimirPlanilhaIndividual = (id) => {
     const divImg = criarElementosHtml('div');
     const img = criarElementosHtml('img');
     const divTableMotorista = criarElementosHtml('div');
-    const tableMotorista = criarElementosHtml('table')
+    const tableMotorista = criarElementosHtml('table');
+    const divTableAjudante01 = criarElementosHtml('div');
+    const tableAjudante01 = criarElementosHtml('table');
+    const theadAjudante01 = criarElementosHtml('thead');
+    const trTheadAjudante01 = criarElementosHtml('tr', '', '<th colspan="4">ADIANTAMENTO PARA DESPESAS DE VIAGEM</th>');
+    const divTableAjudante02 = criarElementosHtml('div');
+    const tableAjudante02 = criarElementosHtml('table');
+    const theadAjudante02 = criarElementosHtml('thead');
+    const trTheadAjudante02 = criarElementosHtml('tr', '', '<th colspan="4">ADIANTAMENTO PARA DESPESAS DE VIAGEM</th>');
+    const theadMotorista = criarElementosHtml('thead');
+    const trTheadMotorista = criarElementosHtml('tr', '', '<th colspan="4">ADIANTAMENTO PARA DESPESAS DE VIAGEM</th>');
+    const tbodyMotorista = criarElementosHtml('tbody');
+    const tbodyAjudante01 = criarElementosHtml('tbody');
+    const tbodyAjudante02 = criarElementosHtml('tbody');
+    const trNomeMotorista = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">MOTORISTA</td><td style="width: 70%;" class="text-center">${dadosPlanilha['dados'][0]['motorista']}</td>`);
+    const trPlaca = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">PLACA</td><td style="width: 70%;" class="text-center">${dadosPlanilha['dados'][0]['placa']}</td>`);
+    const trCarregamentos = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">Nº CARREGO</td><td style="width: 70%;" class="text-center">${dadosPlanilha['dados'][0]['carregamentos']}</td>`);
+    const trData = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">DATA</td><td style="width: 70%;" class="text-center">${validaCampoDataPlanilha()}</td>`);
+    const trDiariaMotorista = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">DIÁRIA</td><td style="width: 70%;" class="text-center">R$ ${dadosPlanilha['valorDiarias']}</td>`);
+    const trChapa = criarElementosHtml('tr', '', '<td style="width: 30%; font-weight: bold;" class="text-left">CHAPA</td><td style="width: 70%;" class="text-center"></td>');
+    const trBorracharia = criarElementosHtml('tr', '', '<td style="width: 30%; font-weight: bold;" class="text-left">BORRACHARIA</td><td style="width: 70%;" class="text-center"></td>');
+    const trGratificacao = criarElementosHtml('tr', '', '<td style="width: 30%; font-weight: bold;" class="text-left">GRATIFICAÇÃO</td><td style="width: 70%;" class="text-center"></td>');
+    const trCombustivel = criarElementosHtml('tr', '', '<td style="width: 30%; font-weight: bold;" class="text-left">COMBUSTÍVEL</td><td style="width: 70%;" class="text-center"></td>');
+    const trNomeAjudante01 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">AJUDANTE</td><td style="width: 70%;" class="text-center">${dadosPlanilha['ajudante01']['nome']}</td>`);
+    const trPlacaAjudante01 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">PLACA</td><td style="width: 70%;" class="text-center">${dadosPlanilha['dados'][0]['placa']}</td>`);
+    const trCarregamentosAjudante01 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">Nº CARREGO</td><td style="width: 70%;" class="text-center">${dadosPlanilha['dados'][0]['carregamentos']}</td>`);
+    const trDataAjudante01 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">DATA</td><td style="width: 70%;" class="text-center">${validaCampoDataPlanilha()}</td>`);
+    const trDiariaAjudante01 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">DIÁRIA</td><td style="width: 70%;" class="text-center">R$ ${dadosPlanilha['ajudante01']['diaria']}</td>`);
+    const trNomeAjudante02 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">AJUDANTE</td><td style="width: 70%;" class="text-center">${dadosPlanilha['ajudante02']['nome']}</td>`);
+    const trPlacaAjudante02 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">PLACA</td><td style="width: 70%;" class="text-center">${dadosPlanilha['dados'][0]['placa']}</td>`);
+    const trCarregamentosAjudante02 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">Nº CARREGO</td><td style="width: 70%;" class="text-center">${dadosPlanilha['dados'][0]['carregamentos']}</td>`);
+    const trDataAjudante02 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">DATA</td><td style="width: 70%;" class="text-center">${validaCampoDataPlanilha()}</td>`);
+    const trDiariaAjudante02 = criarElementosHtml('tr', '', `<td style="width: 30%; font-weight: bold;" class="text-left">DIÁRIA</td><td style="width: 70%;" class="text-center">R$ ${dadosPlanilha['ajudante02']['diaria']}</td>`);
 
     img.src = "./img/logo_oficial_grupo_vicunha.png";
     img.classList.add('img-fluid');
@@ -653,8 +685,51 @@ const imprimirPlanilhaIndividual = (id) => {
     divImg.appendChild(img);
 
     tableMotorista.classList.add('table', 'table-bordered');
+    tableAjudante01.classList.add('table', 'table-bordered');
+    tableAjudante02.classList.add('table', 'table-bordered');
+
+    trTheadMotorista.classList.add('text-center');
+    trTheadAjudante01.classList.add('text-center');
+    trTheadAjudante02.classList.add('text-center');
+    
+    theadMotorista.appendChild(trTheadMotorista);
+    theadAjudante01.appendChild(trTheadAjudante01);
+    theadAjudante02.appendChild(trTheadAjudante02);
+
+    tbodyMotorista.appendChild(trNomeMotorista);
+    tbodyMotorista.appendChild(trPlaca);
+    tbodyMotorista.appendChild(trCarregamentos);
+    tbodyMotorista.appendChild(trData);
+    tbodyMotorista.appendChild(trDiariaMotorista);
+    tbodyMotorista.appendChild(trChapa);
+    tbodyMotorista.appendChild(trBorracharia);
+    tbodyMotorista.appendChild(trGratificacao);
+    tbodyMotorista.appendChild(trCombustivel);
+
+    tbodyAjudante01.appendChild(trNomeAjudante01);
+    tbodyAjudante01.appendChild(trPlacaAjudante01);
+    tbodyAjudante01.appendChild(trCarregamentosAjudante01);
+    tbodyAjudante01.appendChild(trDataAjudante01);
+    tbodyAjudante01.appendChild(trDiariaAjudante01);
+
+    tbodyAjudante02.appendChild(trNomeAjudante02);
+    tbodyAjudante02.appendChild(trPlacaAjudante02);
+    tbodyAjudante02.appendChild(trCarregamentosAjudante02);
+    tbodyAjudante02.appendChild(trDataAjudante02);
+    tbodyAjudante02.appendChild(trDiariaAjudante02);
+
+    tableMotorista.appendChild(theadMotorista);
+    tableMotorista.appendChild(tbodyMotorista);
+
+    tableAjudante01.appendChild(theadAjudante01);
+    tableAjudante01.appendChild(tbodyAjudante01);
+
+    tableAjudante02.appendChild(theadAjudante02);
+    tableAjudante02.appendChild(tbodyAjudante02);
 
     divTableMotorista.appendChild(tableMotorista);
+    divTableAjudante01.appendChild(tableAjudante01);
+    divTableAjudante02.appendChild(tableAjudante02);
 
     const conteudoHtml = `<!DOCTYPE html>
                           <html lang="pt-br">
@@ -670,8 +745,9 @@ const imprimirPlanilhaIndividual = (id) => {
                                 <style>
                                     .table td, .table th {
                                         padding: 5px;
-                                        border: 1px solid #adaaaa;
+                                        border: 1px solid #95999d;
                                     }
+
                                 </style>
 
                                 <title>PLANILHA DE ROTA</title>
@@ -697,6 +773,108 @@ const imprimirPlanilhaIndividual = (id) => {
                                         <div class="col-md-2"></div>
                                     </div>
 
+                                    <br>
+
+                                    <div class="row" style="margin-top: 25px;">
+                                        <div class="col-md-12 text-center">
+                                            <p>________________________________________________________________________</p>
+                                            <p style="margin-top: -15px; font-weight: bold;">MOTORISTA: ${dadosPlanilha['dados'][0]['motorista']}</p>
+                                        </div>
+                                    </div>
+
+                                    <br><br><br><br>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            ${divTableAjudante01.innerHTML}
+
+                                            <br>
+
+                                            <div class="row" style="margin-top: 30px;">
+                                                <div class="col-md-12 text-center">
+                                                    <p>_______________________________________________________</p>
+                                                    <p style="margin-top: -15px; font-weight: bold;">AJUDANTE: ${dadosPlanilha['ajudante01']['nome']}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            ${divTableAjudante02.innerHTML}
+
+                                            <br>
+
+                                            <div class="row" style="margin-top: 30px;">
+                                                <div class="col-md-12 text-center">
+                                                    <p>_______________________________________________________</p>
+                                                    <p style="margin-top: -15px; font-weight: bold;">AJUDANTE: ${dadosPlanilha['ajudante02']['nome']}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br><br><br>
+                            
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr style="border: 1px solid #000">
+                                                        <th></th>
+                                                        <th colspan="2" class="text-center">MANHÃ</th>
+                                                        <th colspan="2" class="text-center">TARDE</th>
+                                                        <th colspan="2" class="text-center">EXTRA</th>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <th class="text-center" style="width: 16%;">DATA</th>
+                                                        <th class="text-center" style="width: 14%;">ENTRADA</th>
+                                                        <th class="text-center" style="width: 14%;">SAÍDA</th>
+                                                        <th class="text-center" style="width: 14%;">ENTRADA</th>
+                                                        <th class="text-center" style="width: 14%;">SAÍDA</th>
+                                                        <th style="width: 14%;"></th>
+                                                        <th style="width: 14%;"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr height="32px">
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+
+                                                    <tr height="32px">
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+
+                                                    <tr height="32px">
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <br>
+
+                                    <p class="font-weight-bold">Km SAÍDA:</p>
+                                    <p class="font-weight-bold">Km CHEGADA:</p>
+
                                 </div>
 
                                 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -709,7 +887,10 @@ const imprimirPlanilhaIndividual = (id) => {
 
     win.document.write(conteudoHtml);
 
-    console.log(conteudoHtml);
+    setTimeout(function(){ 
+        win.print()
+        win.close()
+    }, 1000);
 };
 
 const retornaConteudoVizualizar = (id) => {
